@@ -1,38 +1,56 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo de Adivinhação</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loteria Simulador</title>
+  <style>
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Jogo de Adivinhação</h1>
+  <h1>Loteria Simulador</h1>
 
-    <p>Tente adivinhar o número entre 1 e 10:</p>
-    <input type="text" id="guessInput">
-    <button onclick="verificarAdivinhacao()">Verificar</button>
-    <p id="resultado"></p>
+  <form id="lotteryForm">
+    <label for="numberOfTickets">Número de Bilhetes:</label>
+    <input type="number" id="numberOfTickets" min="1" value="1">
 
-    <script>
-        // Gera um número aleatório entre 1 e 10
-        const numeroAleatorio = Math.floor(Math.random() * 10) + 1;
+    <label for="minNumber">Número Mínimo:</label>
+    <input type="number" id="minNumber" min="1" value="1">
 
-        function verificarAdivinhacao() {
-            // Obtém a entrada do jogador
-            const palpite = document.getElementById('guessInput').value;
+    <label for="maxNumber">Número Máximo:</label>
+    <input type="number" id="maxNumber" min="1" value="50">
 
-            // Converte o palpite para um número
-            const palpiteNumerico = parseInt(palpite);
+    <button type="button" onclick="simulateLottery()">Simular Loteria</button>
+  </form>
 
-            // Verifica se o palpite está correto
-            if (palpiteNumerico === numeroAleatorio) {
-                document.getElementById('resultado').innerHTML = 'Parabéns! Você acertou!';
-            } else {
-                document.getElementById('resultado').innerHTML = 'Desculpe, tente novamente.';
-            }
-        }
-    </script>
+  <h2>Resultados:</h2>
+  <ul id="results"></ul>
+
+  <script>
+    function simulateLottery() {
+      const numberOfTickets = parseInt(document.getElementById('numberOfTickets').value, 10);
+      const minNumber = parseInt(document.getElementById('minNumber').value, 10);
+      const maxNumber = parseInt(document.getElementById('maxNumber').value, 10);
+
+      document.getElementById('results').innerHTML = ''; // Limpar resultados anteriores
+
+      for (let i = 0; i < numberOfTickets; i++) {
+        const randomNumber = getRandomNumber(minNumber, maxNumber);
+        const listItem = document.createElement('li');
+        listItem.textContent = `Bilhete ${i + 1}: Número Sorteado - ${randomNumber}`;
+        document.getElementById('results').appendChild(listItem);
+      }
+    }
+
+    function getRandomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  </script>
 
 </body>
 </html>
