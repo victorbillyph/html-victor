@@ -44,6 +44,9 @@
     <label for="maxNumber">Número Máximo:</label>
     <input type="number" id="maxNumber" min="1" value="10">
 
+    <label for="numbersInCard">Números na Cartela:</label>
+    <input type="number" id="numbersInCard" min="1" value="10">
+
     <button type="button" onclick="startLottery()">Iniciar Loteria</button>
   </form>
 
@@ -56,22 +59,28 @@
     let selectedNumbers = [];
     let winningNumbers = [];
 
+    // Cria a cartela de loteria com os números de 1 a 10
+    document.addEventListener('DOMContentLoaded', () => {
+      createLotteryCard(1, 10);
+    });
+
     function startLottery() {
       const numberOfTickets = parseInt(document.getElementById('numberOfTickets').value, 10);
       const minNumber = parseInt(document.getElementById('minNumber').value, 10);
       const maxNumber = parseInt(document.getElementById('maxNumber').value, 10);
+      const numbersInCard = parseInt(document.getElementById('numbersInCard').value, 10);
 
       resetLottery();
 
       // Cria uma cartela de loteria
-      createLotteryCard(minNumber, maxNumber);
+      createLotteryCard(minNumber, maxNumber, numbersInCard);
 
       // Gera números vencedores
       winningNumbers = generateWinningNumbers(minNumber, maxNumber);
 
       // Simula bilhetes
       for (let i = 0; i < numberOfTickets; i++) {
-        const ticketNumbers = generateTicketNumbers(minNumber, maxNumber);
+        const ticketNumbers = generateTicketNumbers(minNumber, maxNumber, numbersInCard);
         const result = checkResults(ticketNumbers, winningNumbers);
         displayResults(i + 1, ticketNumbers, result);
       }
@@ -80,13 +89,14 @@
     function resetLottery() {
       selectedNumbers = [];
       winningNumbers = [];
-      document.getElementById('lotteryCard').innerHTML = '';
+      updateLotteryCard();
       document.getElementById('results').innerHTML = '';
     }
 
-    function createLotteryCard(min, max) {
+    function createLotteryCard(min, max, numbersInCard) {
       const lotteryCard = document.getElementById('lotteryCard');
-      for (let i = min; i <= max; i++) {
+      lotteryCard.innerHTML = ''; // Limpa a cartela anterior
+      for (let i = 1; i <= numbersInCard; i++) {
         const numberElement = document.createElement('div');
         numberElement.classList.add('number');
         numberElement.textContent = i;
@@ -128,9 +138,9 @@
       return numbers;
     }
 
-    function generateTicketNumbers(min, max) {
+    function generateTicketNumbers(min, max, numbersInCard) {
       const numbers = [];
-      while (numbers.length < 5) {
+      while (numbers.length < numbersInCard) {
         const randomNumber = getRandomNumber(min, max);
         if (!numbers.includes(randomNumber)) {
           numbers.push(randomNumber);
