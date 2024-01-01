@@ -9,6 +9,25 @@
       display: block;
       margin-bottom: 10px;
     }
+
+    .lottery-card {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 20px;
+    }
+
+    .number {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -23,28 +42,111 @@
     <input type="number" id="minNumber" min="1" value="1">
 
     <label for="maxNumber">Número Máximo:</label>
-    <input type="number" id="maxNumber" min="1" value="50">
+    <input type="number" id="maxNumber" min="1" value="10">
 
-    <button type="button" onclick="simulateLottery()">Simular Loteria</button>
+    <button type="button" onclick="startLottery()">Iniciar Loteria</button>
   </form>
+
+  <div class="lottery-card" id="lotteryCard"></div>
 
   <h2>Resultados:</h2>
   <ul id="results"></ul>
 
   <script>
-    function simulateLottery() {
+    let selectedNumbers = [];
+    let winningNumbers = [];
+
+    function startLottery() {
       const numberOfTickets = parseInt(document.getElementById('numberOfTickets').value, 10);
       const minNumber = parseInt(document.getElementById('minNumber').value, 10);
       const maxNumber = parseInt(document.getElementById('maxNumber').value, 10);
 
-      document.getElementById('results').innerHTML = ''; // Limpar resultados anteriores
+      resetLottery();
 
+      // Cria uma cartela de loteria
+      createLotteryCard(minNumber, maxNumber);
+
+      // Gera números vencedores
+      winningNumbers = generateWinningNumbers(minNumber, maxNumber);
+
+      // Simula bilhetes
       for (let i = 0; i < numberOfTickets; i++) {
-        const randomNumber = getRandomNumber(minNumber, maxNumber);
-        const listItem = document.createElement('li');
-        listItem.textContent = `Bilhete ${i + 1}: Número Sorteado - ${randomNumber}`;
-        document.getElementById('results').appendChild(listItem);
+        const ticketNumbers = generateTicketNumbers(minNumber, maxNumber);
+        const result = checkResults(ticketNumbers, winningNumbers);
+        displayResults(i + 1, ticketNumbers, result);
       }
+    }
+
+    function resetLottery() {
+      selectedNumbers = [];
+      winningNumbers = [];
+      document.getElementById('lotteryCard').innerHTML = '';
+      document.getElementById('results').innerHTML = '';
+    }
+
+    function createLotteryCard(min, max) {
+      const lotteryCard = document.getElementById('lotteryCard');
+      for (let i = min; i <= max; i++) {
+        const numberElement = document.createElement('div');
+        numberElement.classList.add('number');
+        numberElement.textContent = i;
+        numberElement.addEventListener('click', () => toggleNumber(i));
+        lotteryCard.appendChild(numberElement);
+      }
+    }
+
+    function toggleNumber(number) {
+      const index = selectedNumbers.indexOf(number);
+      if (index === -1) {
+        selectedNumbers.push(number);
+      } else {
+        selectedNumbers.splice(index, 1);
+      }
+      updateLotteryCard();
+    }
+
+    function updateLotteryCard() {
+      const numbers = document.querySelectorAll('.number');
+      numbers.forEach(numberElement => {
+        const number = parseInt(numberElement.textContent, 10);
+        if (selectedNumbers.includes(number)) {
+          numberElement.style.backgroundColor = 'lightblue';
+        } else {
+          numberElement.style.backgroundColor = '';
+        }
+      });
+    }
+
+    function generateWinningNumbers(min, max) {
+      const numbers = [];
+      while (numbers.length < 5) {
+        const randomNumber = getRandomNumber(min, max);
+        if (!numbers.includes(randomNumber)) {
+          numbers.push(randomNumber);
+        }
+      }
+      return numbers;
+    }
+
+    function generateTicketNumbers(min, max) {
+      const numbers = [];
+      while (numbers.length < 5) {
+        const randomNumber = getRandomNumber(min, max);
+        if (!numbers.includes(randomNumber)) {
+          numbers.push(randomNumber);
+        }
+      }
+      return numbers;
+    }
+
+    function checkResults(ticketNumbers, winningNumbers) {
+      return ticketNumbers.filter(number => winningNumbers.includes(number));
+    }
+
+    function displayResults(ticketNumber, ticketNumbers, result) {
+      const listItem = document.createElement('li');
+      listItem.textContent = `Bilhete ${ticketNumber}: Números Sorteados - ${ticketNumbers.join(', ')}, Acertos - ${result.length}`;
+      document.getElementById('results').appendChild(listItem);
     }
 
     function getRandomNumber(min, max) {
