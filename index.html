@@ -61,7 +61,7 @@
 
     // Cria a cartela de loteria com os números de 1 a 10
     document.addEventListener('DOMContentLoaded', () => {
-      createLotteryCard(1, 10);
+      createLotteryCard(1, 10, 10);
     });
 
     function startLottery() {
@@ -80,7 +80,7 @@
 
       // Simula bilhetes
       for (let i = 0; i < numberOfTickets; i++) {
-        const ticketNumbers = generateTicketNumbers(minNumber, maxNumber, numbersInCard);
+        const ticketNumbers = generateTicketNumbers(minNumber, maxNumber, 5); // Ajuste aqui para considerar apenas 5 números
         const result = checkResults(ticketNumbers, winningNumbers);
         displayResults(i + 1, ticketNumbers, result);
       }
@@ -96,7 +96,7 @@
     function createLotteryCard(min, max, numbersInCard) {
       const lotteryCard = document.getElementById('lotteryCard');
       lotteryCard.innerHTML = ''; // Limpa a cartela anterior
-      for (let i = 1; i <= numbersInCard; i++) {
+      for (let i = min; i <= Math.min(max, numbersInCard); i++) {
         const numberElement = document.createElement('div');
         numberElement.classList.add('number');
         numberElement.textContent = i;
