@@ -80,7 +80,7 @@
 
       // Simula bilhetes
       for (let i = 0; i < numberOfTickets; i++) {
-        const ticketNumbers = generateTicketNumbers(minNumber, maxNumber, 5); // Ajuste aqui para considerar apenas 5 números
+        const ticketNumbers = generateTicketNumbers(minNumber, maxNumber, numbersInCard);
         const result = checkResults(ticketNumbers, winningNumbers);
         displayResults(i + 1, ticketNumbers, result);
       }
@@ -140,7 +140,7 @@
 
     function generateTicketNumbers(min, max, numbersInCard) {
       const numbers = [];
-      while (numbers.length < numbersInCard) {
+      while (numbers.length < 4) { // Ajuste aqui para sortear apenas 4 números
         const randomNumber = getRandomNumber(min, max);
         if (!numbers.includes(randomNumber)) {
           numbers.push(randomNumber);
