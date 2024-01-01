@@ -69,6 +69,7 @@
 
       if (numbersInCard > 6) {
         alert("Por favor, coloque menos de 6 números na cartela.");
+        location.reload(); // Recarrega a página após o alerta
         return;
       }
 
@@ -138,37 +139,4 @@
       while (numbers.length < 5) {
         const randomNumber = getRandomNumber(min, max);
         if (!numbers.includes(randomNumber)) {
-          numbers.push(randomNumber);
-        }
-      }
-      return numbers;
-    }
-
-    function generateTicketNumbers(min, max, numbersInCard) {
-      const numbers = [];
-      while (numbers.length < 4) { // Ajuste aqui para sortear apenas 4 números
-        const randomNumber = getRandomNumber(min, max);
-        if (!numbers.includes(randomNumber)) {
-          numbers.push(randomNumber);
-        }
-      }
-      return numbers;
-    }
-
-    function checkResults(ticketNumbers, winningNumbers) {
-      return ticketNumbers.filter(number => winningNumbers.includes(number));
-    }
-
-    function displayResults(ticketNumber, ticketNumbers, result) {
-      const listItem = document.createElement('li');
-      listItem.textContent = `Bilhete ${ticketNumber}: Números Sorteados - ${ticketNumbers.join(', ')}, Acertos - ${result.length}`;
-      document.getElementById('results').appendChild(listItem);
-    }
-
-    function getRandomNumber(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-  </script>
-
-</body>
-</html>
+          numbers.push(rand
