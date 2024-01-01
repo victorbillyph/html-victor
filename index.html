@@ -70,9 +70,8 @@
     function startLottery() {
       const numbersInCard = parseInt(document.getElementById('numbersInCard').value, 10);
 
-      if (numbersInCard > 6) {
-        alert("Por favor, coloque menos de 6 números na cartela.");
-        location.reload(); // Recarrega a página após o alerta
+      if (numbersInCard > 10) {
+        alert("Por favor, coloque 10 ou menos números na cartela.");
         return;
       }
 
